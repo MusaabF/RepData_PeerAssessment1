@@ -7,19 +7,38 @@ output:
 
 
 ## Loading and preprocessing the data
+data <- read.csv(unz("activity.zip", "activity.csv"), colClasses=c("integer", "Date", "integer"))
+
+data$interval <- 60*floor((data$interval+1)/100) + (data$interval %% 100)
+
+str(data)
+
 
 
 
 ## What is mean total number of steps taken per day?
+9354
 
+StepsPerDay <- tapply(activity$steps, activity$date, sum)
 
 
 ## What is the average daily activity pattern?
+08:35
 
+avg_steps <- tapply(data$steps, data$interval, mean, na.rm=T)
+
+hours <- as.numeric(names(avg_steps))/60
+plot(hours, avg_steps, type="l", axes=F,
+     xlab="time of day (h)", ylab="average number of steps in 5-min interval",
+     main="Daily activity pattern")
+axis(2)
+axis(1, at=0:6*4, labels=paste(0:6*4,":00", sep=""))
 
 
 ## Imputing missing values
+2304
 
+sum(is.na(data))
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
